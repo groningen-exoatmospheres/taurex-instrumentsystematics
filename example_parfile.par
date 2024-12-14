@@ -1,0 +1,33 @@
+Example Parfile:
+
+
+[Observation]
+observation = spectra_w_offsets
+path_spectra = spectrum1.txt, spectrum2.txt, spectrum3.txt
+offsets = 0.0, 1e-3, 0.0
+slopes = 0.0, 0.0, 0.0
+
+[Fitting]
+Offset_1:fit = True
+Offset_1:bounds = -1e-15, 1e-15
+Offset_1:mode = linear
+
+Offset_2:fit = True
+Offset_2:bounds = -1e-15, 1e-15
+Offset_2:mode = linear
+
+Offset_3:fit = True
+Offset_3:bounds = -1e-15, 1e-15
+Offset_3:mode = linear
+
+Slope_1:fit = True
+Slope_1:bounds = -1e-15, 1e-15
+Slope_1:mode = linear
+
+Slope_2:fit = True
+Slope_2:bounds = -1e-15, 1e-15
+Slope_2:mode = linear
+
+Slope_3:fit = True
+Slope_3:bounds = -1e-15, 1e-15
+Slope_3:mode = linear
