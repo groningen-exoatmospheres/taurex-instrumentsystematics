@@ -24,6 +24,13 @@ class OffsetSpectraCont(BaseSpectrum):
         self.slope_type = slope_type
         self.offsets = offsets
         self.slopes = slopes
+
+        if len(broadening_profiles) != len(path_spectra):
+            raise NotImplementedError('The broadening profiles does not match the spectra')
+
+        elif len(broadening_profiles) == []:
+            raise NotImplementedError('No broadening profiles. Do not use this plugin to load your spectra.')
+                        
         if len(self.offsets) == 0:
             #self.info('offsets are not init, set to 0')
             self.offsets = [0.0]*len(self.path_spectra)
