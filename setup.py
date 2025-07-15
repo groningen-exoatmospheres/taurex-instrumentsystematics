@@ -10,6 +10,8 @@ provides = ['taurex_instrumentsystematics', ]
 
 requires = []
 
+version = "1.0.0" 
+
 install_requires = ['taurex']
 
 entry_points = {'taurex.plugins': 'taurex_instrumentsystematics = taurex_instrumentsystematics'}
@@ -20,6 +22,8 @@ setup(name='taurex_instrumentsystematics',
       license="BSD",
       description='Add multiple spectra and Instrument Systematics fitting to TauREx 3.1',
       packages=packages,
+      version=version,
+      url="https://github.com/groningen-exoatmospheres/taurex-instrumentsystematics",
       entry_points=entry_points,
       provides=provides,
       requires=requires,
