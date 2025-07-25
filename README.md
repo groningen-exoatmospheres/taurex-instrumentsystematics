@@ -27,7 +27,7 @@ The plugin is used by specifying "spectra_instr" as keyword in the parfile.
 | `offsets` | Array of same size as path_spectra with offsets |
 | `slopes` | Array of same size as path_spectra with slopes |
 | `broadening_profile` | Path to instrument files. These should be .fits using STScI formal or .txt using formal: wavelength (um), resolution |
-| `wlshift` | To introduce a linear wavelength shift |
+| `wlshift` | To introduce a linear wavelength shift. THIS THIS NOT YET IMPLEMENTED AND SO DOES NOTHING. FOR WAVELENGTH SHIFTS USE TAUREX-MULTIMODEL FOR NOW. |  
 
 ---
 
