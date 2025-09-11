@@ -176,7 +176,7 @@ class FluxBinnerConv(Binner):
                 if error is not None:
                     error = error[i][::-1]
 
-                O_master = (10000/wngrid[i][::-1], spectrum[i][::-1], error, grid_width) ## errror and grid widths are already reversed and in correct units.
+                O_master = (10000/np.array(wngrid[i][::-1]), spectrum[i][::-1], error, grid_width) ## errror and grid widths are already reversed and in correct units.
             else:
                 if grid_width is not None:
                     grid_width = grid_width[i]
