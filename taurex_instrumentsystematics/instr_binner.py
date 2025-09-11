@@ -120,6 +120,12 @@ class FluxBinnerConv(Binner):
         return Y[0], X_conv, Y[2], Y[3]
 
     def bindown(self, wngrid, spectrum, grid_width=None, error=None, in_wavenumber = True):
+        if spectrum.ndim == 1:
+            return self.bindown1d(wngrid, spectrum, grid_width=grid_width, error=error, in_wavenumber = in_wavenumber)
+        elif spectrum.ndim == 2:
+            return self.bindown2d(wngrid, spectrum, grid_width=grid_width, error=error, in_wavenumber = in_wavenumber)
+
+    def bindown1d(self, wngrid, spectrum, grid_width=None, error=None, in_wavenumber = True):
         if in_wavenumber:
             if grid_width is not None:
                 grid_width = wnwidth_to_wlwidth(wngrid, grid_width)[::-1]
@@ -134,6 +140,52 @@ class FluxBinnerConv(Binner):
         ers = []
         wws = []
         for i, b in enumerate(self.binners):
+            if self._profile_type == 'stsci_fits':
+                o = self._grid_fbs[i].bindown(O_master[0], O_master[1], error=O_master[3], grid_width=O_master[2])
+                #self.SAVE1 = o
+                o = self.low_res_convolved(o, self._profiles[i])
+                #self.SAVE2 = o
+            else:
+                o = O_master
+            o = b.bindown(o[0], o[1], grid_width=o[3], error=o[2])
+            #self.SAVE3 = o
+            
+            wls.append(o[0])
+            sps.append(o[1])
+            ers.append(o[2])
+            wws.append(o[3])
+        wlgrid = np.concatenate(wls)
+        wlgrid_width = np.concatenate(wws)
+        if error == None:
+            res_ers = None
+        else:
+            res_ers = np.concatenate(ers)
+   
+        return wlgrid, np.concatenate(sps), res_ers, wlgrid_width
+
+    def bindown2d(self, wngrid, spectrum, grid_width=None, error=None, in_wavenumber = True):
+        Nspec = len(spectrum)
+
+        for i, b in enumerate(self.binners):
+
+            if in_wavenumber:
+                if grid_width is not None:
+                    grid_width = wnwidth_to_wlwidth(wngrid[i], grid_width[i])[::-1]
+                if error is not None:
+                    error = error[i][::-1]
+
+                O_master = (10000/wngrid[i][::-1], spectrum[i][::-1], error, grid_width) ## errror and grid widths are already reversed and in correct units.
+            else:
+                if grid_width is not None:
+                    grid_width = grid_width[i]
+                if error is not None
+                    error = error[i]
+                O_master = (wngrid[i], spectrum[i], error, grid_width)
+            wls = []
+            sps = []
+            ers = []
+            wws = []
+        
             if self._profile_type == 'stsci_fits':
                 o = self._grid_fbs[i].bindown(O_master[0], O_master[1], error=O_master[3], grid_width=O_master[2])
                 #self.SAVE1 = o
