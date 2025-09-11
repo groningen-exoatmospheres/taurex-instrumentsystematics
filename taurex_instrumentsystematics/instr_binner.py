@@ -120,10 +120,12 @@ class FluxBinnerConv(Binner):
         return Y[0], X_conv, Y[2], Y[3]
 
     def bindown(self, wngrid, spectrum, grid_width=None, error=None, in_wavenumber = True):
-        if spectrum.ndim == 1:
-            return self.bindown1d(wngrid, spectrum, grid_width=grid_width, error=error, in_wavenumber = in_wavenumber)
-        elif spectrum.ndim == 2:
+        if isinstance(spectrum, np.ndarray):
             return self.bindown2d(wngrid, spectrum, grid_width=grid_width, error=error, in_wavenumber = in_wavenumber)
+        else:
+            return self.bindown1d(wngrid, spectrum, grid_width=grid_width, error=error, in_wavenumber = in_wavenumber)
+        #elif spectrum.ndim == 2:
+            
 
     def bindown1d(self, wngrid, spectrum, grid_width=None, error=None, in_wavenumber = True):
         if in_wavenumber:
@@ -178,7 +180,7 @@ class FluxBinnerConv(Binner):
             else:
                 if grid_width is not None:
                     grid_width = grid_width[i]
-                if error is not None
+                if error is not None:
                     error = error[i]
                 O_master = (wngrid[i], spectrum[i], error, grid_width)
             wls = []
