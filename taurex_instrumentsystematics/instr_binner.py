@@ -120,7 +120,7 @@ class FluxBinnerConv(Binner):
         return Y[0], X_conv, Y[2], Y[3]
 
     def bindown(self, wngrid, spectrum, grid_width=None, error=None, in_wavenumber = True):
-        if isinstance(spectrum, np.ndarray):
+        if isinstance(spectrum[0], np.ndarray):
             return self.bindown2d(wngrid, spectrum, grid_width=grid_width, error=error, in_wavenumber = in_wavenumber)
         else:
             return self.bindown1d(wngrid, spectrum, grid_width=grid_width, error=error, in_wavenumber = in_wavenumber)
