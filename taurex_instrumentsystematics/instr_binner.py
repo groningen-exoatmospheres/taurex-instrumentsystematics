@@ -28,7 +28,7 @@ class FluxBinnerConv(Binner):
     """
     def __init__(self, wlgrids, wlgrid_widths=None, 
                  broadening_profiles = None,
-                 profile_type = 'stsci_fits',
+                 broadening_type = 'stsci_fits',
                  max_wlbroadening = None,
                  factor_cut = 5,
                  wlres = 15000):
@@ -37,7 +37,7 @@ class FluxBinnerConv(Binner):
         self._wlgrids = wlgrids
         self._wlgrid_widths = wlgrid_widths
         self._broadening_profiles = broadening_profiles
-        self._profile_type = profile_type
+        self._profile_type = broadening_type
         self._max_wlbroadening = max_wlbroadening
         self._factor_cut = factor_cut
         self._wlres = wlres
