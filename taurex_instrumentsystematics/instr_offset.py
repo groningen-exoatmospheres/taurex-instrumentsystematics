@@ -8,13 +8,14 @@ from .instr_binner import FluxBinnerConv
 
 
 class OffsetSpectraCont(BaseSpectrum):
-    def __init__(self, path_spectra = [], offsets = [], slopes = [], slope_type ='linear',
+    def __init__(self, path_spectra = [], offsets = [], slopes = [], slope_type ='linear', profile_type='stsci_fits',
                     broadening_profiles = [], wlshift = 0.0, max_wlbroadening = 0.1, factor_cut = 5, wlres = 15000,):
         
         super().__init__(self.__class__.__name__)
         
         self._wlshift = wlshift
         self._broadening_profiles = broadening_profiles
+        self._profile_type = profile_type
         self._max_wlbroadening = max_wlbroadening
         self._factor_cut = factor_cut
         self._wlres = wlres
@@ -163,6 +164,7 @@ class OffsetSpectraCont(BaseSpectrum):
         return FluxBinnerConv(wlgrids=self._raw_wlgrid,
                             wlgrid_widths=self._raw_bin_widths,
                             broadening_profiles = self._broadening_profiles,
+                            profile_type = self._profile_type,
                             max_wlbroadening = self._max_wlbroadening,
                             factor_cut = self._factor_cut,
                             wlres = self._wlres)

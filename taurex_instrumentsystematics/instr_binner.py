@@ -168,6 +168,11 @@ class FluxBinnerConv(Binner):
     def bindown2d(self, wngrid, spectrum, grid_width=None, error=None, in_wavenumber = True):
         Nspec = len(spectrum)
 
+        wls = []
+        sps = []
+        ers = []
+        wws = []
+
         for i, b in enumerate(self.binners):
 
             if in_wavenumber:
@@ -183,10 +188,6 @@ class FluxBinnerConv(Binner):
                 if error is not None:
                     error = error[i]
                 O_master = (wngrid[i], spectrum[i], error, grid_width)
-            wls = []
-            sps = []
-            ers = []
-            wws = []
         
             if self._profile_type == 'stsci_fits':
                 o = self._grid_fbs[i].bindown(O_master[0], O_master[1], error=O_master[3], grid_width=O_master[2])
