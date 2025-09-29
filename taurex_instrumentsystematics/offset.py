@@ -5,11 +5,12 @@ from taurex.data.fittable import fitparam
 import numpy as np
 
 class OffsetSpectra(ArraySpectrum):
-    def __init__(self, path_spectra = [], offsets = [], slopes = [], slope_type ='linear'):
+    def __init__(self, path_spectra = [], offsets = [], slopes = [],error_scale=[], slope_type ='linear'):
         #Logger.__init__(self,'MultiSpectra')
         self.path_spectra = path_spectra
         self.slope_type = slope_type
         self.offsets = offsets
+        self.escale = error_scale
         self.slopes = slopes
         if len(self.offsets) == 0:
             #self.info('offsets are not init, set to 0')
@@ -19,6 +20,8 @@ class OffsetSpectra(ArraySpectrum):
             raise NotImplementedError('Check dimensions of the parameters path_spectra and offsets')
         if len(self.slopes) != len(self.path_spectra): 
             self.slopes = [0.0]*len(self.path_spectra)
+        if len(self.escale) != len(self.path_spectra): 
+            self.escale = [1.0]*len(self.path_spectra)
         
         self._obs_spectra = []
         for i, s in enumerate(self.path_spectra):
@@ -66,6 +69,16 @@ class OffsetSpectra(ArraySpectrum):
             self.add_fittable_param(param_name, param_latex, fget_point,
                                     fset_point, 'linear', default_fit, bounds)
 
+            param_name_escale = 'EScale_{}'.format(point_num)
+            param_latex_escale = '$Escale_{}$'.format(point_num)
+            def read_point_escale(self, idx=idx):
+                return self.escale[idx]
+            def write_point_escale(self, value, idx=idx):
+                self.escale[idx] = value
+            default_fit = False
+            self.add_fittable_param(param_name_escale, param_latex_escale, read_point_escale,
+                                    write_point_escale, 'linear', default_fit, bounds)
+
             param_name_slope = 'Slope_{}'.format(point_num)
             param_latex_slope = '$Slope_{}$'.format(point_num)
             def read_point_slope(self, idx=idx):
@@ -75,7 +88,6 @@ class OffsetSpectra(ArraySpectrum):
             default_fit = False
             self.add_fittable_param(param_name_slope, param_latex_slope, read_point_slope,
                                     write_point_slope, 'linear', default_fit, bounds)
-    
     
     @property
     def spectrum(self):
@@ -90,8 +102,22 @@ class OffsetSpectra(ArraySpectrum):
             else:
                 X = np.concatenate( (X,spec[i][:,1]))
         X = X[self.sort]
-        self._obs_spectrum[:,1] = X
-        return self._obs_spectrum[:,1]
+        #self._obs_spectrum[:,1] = X
+        return X
+    
+    @property
+    def errorBar(self):
+        """ Error bars for the spectrum"""
+        spec = copy.deepcopy(self._obs_spectra)
+        for i, o in enumerate(self.escale):
+            spec[i][:,2] = o*spec[i][:,2]
+            if i == 0:
+                X = spec[i][:,2]
+            else:
+                X = np.concatenate( (X,spec[i][:,2]))
+        X = X[self.sort]
+        #self._obs_spectrum[:,2] = X
+        return X
     
     @classmethod
     def input_keywords(self):
